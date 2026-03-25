@@ -1,0 +1,46 @@
+{
+  "total_items": 30,
+  "items_with_pdfs": 30,
+  "pdfs_processed": 23,
+  "pdfs_failed": 7,
+  "total_chunks": 100,
+  "total_embeddings": 100,
+  "processing_time": 17.256120920181274,
+  "failed_items": [
+    {
+      "item_id": "9",
+      "title": "Models of Capitalism: Lessons for Latin America",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "10",
+      "title": "Postindustrial Social Policy",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "11",
+      "title": "Do Social Investment Policies Produce More and Better Jobs?",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "12",
+      "title": "The Changing Shapes of Latin American Welfare States",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "13",
+      "title": "Predistribution and Redistribution: Alternative or Complementary Policies?",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "22",
+      "title": "Capitalist Development and Democracy (Latin America chapter)",
+      "reason": "No chunks created"
+    },
+    {
+      "item_id": "24",
+      "title": "Capitalist Development and Democracy: The Controversy",
+      "reason": "No chunks created"
+    }
+  ]
+}
