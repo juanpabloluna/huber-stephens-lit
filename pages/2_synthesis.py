@@ -144,7 +144,12 @@ def main():
             except AttributeError:
                 pass  # Stale cached engine without hybrid retrieval
 
-            with st.spinner("Synthesizing across the Huber-Stephens corpus... Retrieving papers, identifying themes, and writing your review. This may take 1-2 minutes."):
+            import random
+            spinner_msg = random.choice([
+                "Close your eyes and think with me...",
+                "Hitting the slopes, I'll be back in a bit...",
+            ])
+            with st.spinner(spinner_msg):
                 try:
                     review = synthesis_engine.generate_literature_review(
                         topic=topic,

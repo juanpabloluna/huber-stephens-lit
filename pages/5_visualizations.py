@@ -76,7 +76,12 @@ if generate and request:
     if engine is None:
         st.error("Visualization engine not available.")
     else:
-        with st.spinner("Searching across the Huber-Stephens corpus and building your visualization... This may take 30-60 seconds."):
+        import random
+        spinner_msg = random.choice([
+            "Close your eyes and think with me...",
+            "Hitting the slopes, I'll be back in a bit...",
+        ])
+        with st.spinner(spinner_msg):
             try:
                 html = engine.generate_visualization(
                     request=request,

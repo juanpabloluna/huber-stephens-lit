@@ -149,7 +149,12 @@ if st.button("Ask Question", type="primary"):
         except (AttributeError, Exception):
             pass  # Stale cached Retriever or other init error
 
-        with st.spinner("Claude is searching across the Huber-Stephens corpus, running multiple queries to build a comprehensive answer..."):
+        import random
+        spinner_msg = random.choice([
+            "Close your eyes and think with me...",
+            "Hitting the slopes, I'll be back in a bit...",
+        ])
+        with st.spinner(spinner_msg):
             # Get answer
             result = engine.answer_question(
                 question=question,

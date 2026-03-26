@@ -149,7 +149,12 @@ def main():
         # Process review
         if review_button and draft_text:
             if review_type == "Full Review":
-                with st.spinner("🤔 Analyzing your research... This may take 1-2 minutes..."):
+                import random
+                spinner_msg = random.choice([
+                    "Close your eyes and think with me...",
+                    "Hitting the slopes, I'll be back in a bit...",
+                ])
+                with st.spinner(spinner_msg):
                     try:
                         report = review_engine.review_research(
                             draft_text=draft_text,

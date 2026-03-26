@@ -192,7 +192,12 @@ def main():
         except AttributeError:
             st.caption("Author detection unavailable")
 
-        with st.spinner("Searching the Huber-Stephens corpus for relevant passages and generating your answer..."):
+        import random
+        spinner_msg = random.choice([
+            "Close your eyes and think with me...",
+            "Hitting the slopes, I'll be back in a bit...",
+        ])
+        with st.spinner(spinner_msg):
             try:
                 # Generate answer (fresh retrieval every time)
                 if use_history and st.session_state.qa_history:
