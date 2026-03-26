@@ -98,8 +98,8 @@ if generate and request:
                 components.html(html, height=700, scrolling=True)
 
             except Exception as e:
-                st.error(f"Error generating visualization: {e}")
-                logger.error(f"Viz generation failed: {e}", exc_info=True)
+                st.error(f"Error generating visualization: {str(e)}")
+                logger.error("Viz generation failed: " + str(e), exc_info=True)
 
 # Download button (persists across reruns)
 if "last_viz_html" in st.session_state:

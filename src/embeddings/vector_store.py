@@ -168,18 +168,18 @@ class VectorStore:
         # Generate embedding once
         query_embedding = embedding_service.embed_text(query_text).tolist()
 
-        # Build metadata filters
-        where_filters = {}
+        # Build metadata filters — ChromaDB requires $and for compound filters
+        where = None
 
-        if min_year:
-            where_filters["year"] = {"$gte": min_year}
-        if max_year:
-            if "year" in where_filters:
-                where_filters["year"]["$lte"] = max_year
-            else:
-                where_filters["year"] = {"$lte": max_year}
-
-        where = where_filters if where_filters else None
+        if min_year and max_year:
+            where = {"$and": [
+                {"year": {"$gte": min_year}},
+                {"year": {"$lte": max_year}},
+            ]}
+        elif min_year:
+            where = {"year": {"$gte": min_year}}
+        elif max_year:
+            where = {"year": {"$lte": max_year}}
         collections_filter = collections
 
         # --- Hybrid retrieval when author names are detected ---
