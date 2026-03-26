@@ -150,52 +150,99 @@ Analyze:
 Provide a synthetic analysis, not just paper-by-paper summaries."""
 
 
-VISUALIZATION_SYSTEM_PROMPT = """You generate complete, working HTML files that visualize academic concepts as interactive diagrams.
+VISUALIZATION_SYSTEM_PROMPT = r"""You generate working HTML visualizations. You MUST NOT use D3.js or ANY external library. Use ONLY vanilla JavaScript with document.createElementNS for SVG.
 
-CRITICAL RULES:
-1. Output ONLY the HTML — no explanation before or after. Start with <!DOCTYPE html> and end with </html>.
-2. ALL nodes MUST be rendered as SVG <circle> and <text> elements with EXPLICIT x/y coordinates.
-3. ALL edges MUST be rendered as SVG <line> elements with EXPLICIT x1/y1/x2/y2 coordinates.
-4. DO NOT rely on JavaScript to position nodes. Compute positions statically (e.g., circular layout, grid, or hardcoded coordinates). JavaScript should only handle drag/hover interactivity.
-5. The SVG must have a FIXED viewBox like viewBox="0 0 900 600" and explicit width="100%" height="600".
-6. Use dark background (#0f1419), light text (#e8e6e3), colored nodes.
-7. No external dependencies. No D3. No libraries. Pure HTML+CSS+JS.
+Here is a MINIMAL WORKING EXAMPLE. Follow this exact pattern, expanding with more nodes/edges as needed:
 
-USE THIS EXACT PATTERN for node layout (circular arrangement):
-
-```
-// Place N nodes in a circle
-var cx = 450, cy = 300, radius = 200;
-nodes.forEach(function(n, i) {
-  var angle = (2 * Math.PI * i) / nodes.length;
-  n.x = cx + radius * Math.cos(angle);
-  n.y = cy + radius * Math.sin(angle);
+```html
+<!DOCTYPE html>
+<html><head><style>
+body{margin:0;background:#0f1419;color:#e8e6e3;font-family:Georgia,serif}
+svg{display:block;margin:20px auto}
+.node-label{font-size:11px;fill:#e8e6e3;text-anchor:middle;pointer-events:none}
+</style></head><body>
+<h2 style="text-align:center;padding:15px">Title Here</h2>
+<svg id="g" width="900" height="600" viewBox="0 0 900 600">
+<defs><marker id="ah" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M0,0 L10,3 L0,6Z" fill="#999"/></marker></defs>
+</svg>
+<div style="position:fixed;top:10px;left:10px;background:#1a1f2e;padding:10px;border-radius:6px;font-size:12px;border:1px solid #333">
+<b>Legend</b><br>
+<span style="color:#e53e3e">● Core concept</span><br>
+<span style="color:#38a169">● Driver</span><br>
+<span style="color:#805ad5">● Outcome</span>
+</div>
+<script>
+var svg=document.getElementById("g");
+var nodes=[
+  {id:"a",label:"Concept A",x:200,y:200,r:30,color:"#e53e3e"},
+  {id:"b",label:"Concept B",x:500,y:150,r:25,color:"#38a169"},
+  {id:"c",label:"Outcome C",x:700,y:350,r:28,color:"#805ad5"}
+];
+var edges=[
+  {from:"a",to:"b",color:"#e53e3e",width:2},
+  {from:"b",to:"c",color:"#38a169",width:1.5}
+];
+var ns="http://www.w3.org/2000/svg";
+// Draw edges first
+edges.forEach(function(e){
+  var s=nodes.find(function(n){return n.id===e.from});
+  var t=nodes.find(function(n){return n.id===e.to});
+  var ln=document.createElementNS(ns,"line");
+  ln.setAttribute("x1",s.x);ln.setAttribute("y1",s.y);
+  ln.setAttribute("x2",t.x);ln.setAttribute("y2",t.y);
+  ln.setAttribute("stroke",e.color);ln.setAttribute("stroke-width",e.width);
+  ln.setAttribute("marker-end","url(#ah)");
+  ln.dataset.from=e.from;ln.dataset.to=e.to;
+  svg.appendChild(ln);
 });
+// Draw nodes
+nodes.forEach(function(n){
+  var c=document.createElementNS(ns,"circle");
+  c.setAttribute("cx",n.x);c.setAttribute("cy",n.y);c.setAttribute("r",n.r);
+  c.setAttribute("fill",n.color+"44");c.setAttribute("stroke",n.color);c.setAttribute("stroke-width","2");
+  c.dataset.id=n.id;svg.appendChild(c);
+  var t=document.createElementNS(ns,"text");
+  t.setAttribute("x",n.x);t.setAttribute("y",n.y+n.r+14);
+  t.setAttribute("class","node-label");t.textContent=n.label;
+  svg.appendChild(t);
+});
+// Drag
+var drag=null,ox=0,oy=0;
+svg.addEventListener("mousedown",function(e){
+  if(e.target.tagName==="circle"){
+    drag=e.target.dataset.id;
+    var n=nodes.find(function(x){return x.id===drag});
+    ox=e.clientX-n.x;oy=e.clientY-n.y;
+  }
+});
+svg.addEventListener("mousemove",function(e){
+  if(!drag)return;
+  var n=nodes.find(function(x){return x.id===drag});
+  n.x=e.clientX-ox;n.y=e.clientY-oy;
+  // Update circle
+  var circles=svg.querySelectorAll("circle");
+  circles.forEach(function(c){if(c.dataset.id===drag){c.setAttribute("cx",n.x);c.setAttribute("cy",n.y);}});
+  // Update label
+  var texts=svg.querySelectorAll("text");
+  texts.forEach(function(t){if(t.textContent===n.label){t.setAttribute("x",n.x);t.setAttribute("y",n.y+n.r+14);}});
+  // Update edges
+  var lines=svg.querySelectorAll("line");
+  lines.forEach(function(l){
+    if(l.dataset.from===drag){l.setAttribute("x1",n.x);l.setAttribute("y1",n.y);}
+    if(l.dataset.to===drag){l.setAttribute("x2",n.x);l.setAttribute("y2",n.y);}
+  });
+});
+svg.addEventListener("mouseup",function(){drag=null;});
+</script></body></html>
 ```
 
-Then render each node as:
-```
-<circle cx="..." cy="..." r="25" fill="..." stroke="..."/>
-<text x="..." y="..." text-anchor="middle" fill="#e8e6e3">Label</text>
-```
-
-And each edge as:
-```
-<line x1="..." y1="..." x2="..." y2="..." stroke="..." stroke-width="1.5" marker-end="url(#arrow)"/>
-```
-
-For drag interactivity, add mousedown/mousemove/mouseup handlers that update cx/cy attributes.
-
-Node types and colors:
-- Core concepts: #e53e3e (red)
-- Causal drivers: #38a169 (green)
-- Outcomes: #805ad5 (purple)
-- Constraints: #d69e2e (yellow)
-- State models: #dd6b20 (orange)
-- Dimensions: #3182ce (blue)
-
-Include a legend box in the top-left corner. Include a title.
-Ground all content in the literature provided. Use real concepts and citations."""
+RULES:
+1. Follow the pattern above EXACTLY. Use document.createElementNS, NOT d3.select.
+2. NEVER use D3.js. NEVER add <script src="...">. NEVER use any library.
+3. All nodes must have hardcoded x,y coordinates. Space them out well across the 900x600 canvas.
+4. Output ONLY the HTML. Start with <!DOCTYPE html>, end with </html>. No text before or after.
+5. Use the color scheme: #e53e3e (core), #38a169 (drivers), #805ad5 (outcomes), #d69e2e (constraints), #dd6b20 (models), #3182ce (dimensions).
+6. Ground all concepts in the actual literature context provided."""
 
 
 VISUALIZATION_USER_PROMPT = """Literature context:
@@ -209,4 +256,4 @@ Papers in the corpus:
 
 Visualization request: {request}
 
-Generate a COMPLETE HTML file. Start with <!DOCTYPE html>. All nodes must have explicit x/y positions. All edges must have explicit coordinates. Do NOT output any text before or after the HTML."""
+Generate a COMPLETE working HTML file following the exact vanilla JS + SVG pattern from your instructions. NO D3. NO external libraries. All nodes with explicit x,y coordinates. Start with <!DOCTYPE html>."""
