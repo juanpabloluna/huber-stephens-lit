@@ -98,7 +98,7 @@ collections = None
 if use_collections:
     collections_input = st.sidebar.text_input(
         "Collections (comma-separated)",
-        help="Example: Hot spots policing, Focused deterrence",
+        help="Example: Welfare State, Democracy, Redistribution",
     )
     if collections_input:
         collections = [c.strip() for c in collections_input.split(",")]
@@ -125,7 +125,7 @@ st.header("Ask Your Question")
 
 question = st.text_area(
     "Question",
-    placeholder="What are the most effective crime prevention strategies according to the evidence?",
+    placeholder="How did the concept of state effectiveness evolve from Capitalist Development and Democracy (1992) to the Evans, Huber, and Stephens chapter (2017)?",
     height=100,
 )
 
@@ -149,7 +149,7 @@ if st.button("Ask Question", type="primary"):
         except (AttributeError, Exception):
             pass  # Stale cached Retriever or other init error
 
-        with st.spinner("Claude is researching your question..."):
+        with st.spinner("Claude is searching across the Huber-Stephens corpus, running multiple queries to build a comprehensive answer..."):
             # Get answer
             result = engine.answer_question(
                 question=question,
@@ -270,11 +270,11 @@ st.markdown("---")
 st.header("Example Questions")
 
 examples = [
-    "What policing strategies are most effective at reducing violent crime?",
-    "What is the evidence on focused deterrence programs?",
-    "What methodologies are used to evaluate crime prevention programs?",
-    "How effective are hot spots policing strategies?",
-    "What role does community engagement play in crime reduction?",
+    "How does power resources theory explain variation in welfare state generosity across countries?",
+    "What are the three power clusters and how do they interact to produce democratic outcomes?",
+    "How did Huber and Stephens's analysis of Latin American welfare states differ from their OECD analysis?",
+    "What is the Sen-Ostrom model of state effectiveness and why does it matter?",
+    "How do constitutional veto points shape welfare state effort according to the 1993 AJS article?",
 ]
 
 st.markdown("Try these questions to see the agentic system in action:")

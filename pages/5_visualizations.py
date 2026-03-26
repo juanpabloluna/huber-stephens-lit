@@ -18,12 +18,6 @@ from src.utils.auth import require_auth
 
 require_auth()
 
-st.set_page_config(
-    page_title="Visualizations | Huber-Stephens Expert",
-    page_icon="🎨",
-    layout="wide",
-)
-
 st.title("Interactive Visualizations")
 st.markdown(
     "Generate concept maps, causal graphs, timelines, and comparison diagrams "
@@ -82,7 +76,7 @@ if generate and request:
     if engine is None:
         st.error("Visualization engine not available.")
     else:
-        with st.spinner("Retrieving literature and generating visualization..."):
+        with st.spinner("Searching across the Huber-Stephens corpus and building your visualization... This may take 30-60 seconds."):
             try:
                 html = engine.generate_visualization(
                     request=request,

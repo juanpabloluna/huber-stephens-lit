@@ -111,7 +111,7 @@ def main():
         topic = st.text_area(
             "Research Topic or Question",
             height=100,
-            placeholder="Example: Evidence on the effectiveness of hot spots policing",
+            placeholder="Example: The evolution of power resources theory from the 1990s to the 2020s",
             help="Enter the topic or research question for your literature review"
         )
 
@@ -144,7 +144,7 @@ def main():
             except AttributeError:
                 pass  # Stale cached engine without hybrid retrieval
 
-            with st.spinner("🔍 Generating literature review... This may take 1-2 minutes..."):
+            with st.spinner("Synthesizing across the Huber-Stephens corpus... Retrieving papers, identifying themes, and writing your review. This may take 1-2 minutes."):
                 try:
                     review = synthesis_engine.generate_literature_review(
                         topic=topic,
@@ -255,12 +255,12 @@ def main():
         ### Choosing a Good Topic
 
         **Be Specific:**
-        - ✅ "Theories of crime prevention and deterrence"
-        - ❌ "Crime in Latin America" (too broad)
+        - ✅ "The evolution of power resources theory and its empirical applications"
+        - ❌ "The welfare state" (too broad)
 
         **Frame as a Question or Theme:**
-        - ✅ "What explains variation in gang violence?"
-        - ✅ "The relationship between policing strategies and crime reduction"
+        - ✅ "How does partisan incumbency shape welfare state generosity over time?"
+        - ✅ "The relationship between state capacity and democratic consolidation"
 
         ### Using Filters Effectively
 
@@ -311,24 +311,24 @@ def main():
         ### Example Topics
 
         **Theoretical Reviews:**
-        - "Theories of situational crime prevention"
-        - "The security-development nexus in Latin America"
-        - "Social control theories in gang research"
+        - "Power resources theory vs. institutional explanations of redistribution"
+        - "The three power clusters framework and its evolution since 1992"
+        - "State effectiveness: from Weberian capacity to the Sen-Ostrom model"
 
         **Empirical Reviews:**
-        - "Quantitative studies of homicide rates in Latin America"
-        - "Ethnographic research on gang life"
-        - "Natural experiments in policing interventions"
+        - "Quantitative evidence on partisan effects on welfare spending"
+        - "Comparative analysis of Latin American welfare state development"
+        - "Income inequality and redistribution in postindustrial democracies"
 
-        **Methodological Reviews:**
-        - "Methods for studying illicit markets"
-        - "Challenges in crime data collection in Latin America"
-        - "Randomized controlled trials in criminology"
+        **Conceptual Evolution Reviews:**
+        - "How the concept of state strength evolved from 1995 to 2017"
+        - "The social democratic service state: origins and contemporary relevance"
+        - "From Capitalist Development and Democracy to Challenging Inequality"
 
-        **Regional/Temporal Reviews:**
-        - "Literature on drug trafficking in Mexico, 2010-2020"
-        - "Evolution of favela research in Rio de Janeiro"
-        - "Central American gang research since MS-13"
+        **Regional Reviews:**
+        - "Welfare state development in Latin America vs. East Asia"
+        - "Social investment strategies in Latin American welfare states"
+        - "The European social model under pressure"
 
         ### Using the Output
 

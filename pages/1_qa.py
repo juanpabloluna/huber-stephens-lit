@@ -78,7 +78,7 @@ def main():
     """Main Q&A page."""
 
     st.title("❓ Question Answering")
-    st.markdown("Ask questions about the crime prevention literature and get answers with citations.")
+    st.markdown("Ask questions about the Huber-Stephens research program and get answers with full-authorship citations.")
 
     # Initialize session state
     if "qa_history" not in st.session_state:
@@ -161,7 +161,7 @@ def main():
     question = st.text_area(
         "Your Question",
         height=100,
-        placeholder="Example: What policing strategies are most effective at reducing violent crime?",
+        placeholder="Example: What is the social democratic service state and how does it differ from the transfer state?",
         help="Ask a specific question about your literature"
     )
 
@@ -192,7 +192,7 @@ def main():
         except AttributeError:
             st.caption("Author detection unavailable")
 
-        with st.spinner("Retrieving relevant papers and generating answer..."):
+        with st.spinner("Searching the Huber-Stephens corpus for relevant passages and generating your answer..."):
             try:
                 # Generate answer (fresh retrieval every time)
                 if use_history and st.session_state.qa_history:
@@ -311,12 +311,12 @@ def main():
         ### How to Ask Good Questions
 
         **Be Specific:**
-        - ✅ "What policing strategies are most effective at reducing violent crime?"
-        - ❌ "Tell me about crime"
+        - ✅ "How do Huber and Stephens conceptualize the relationship between partisan incumbency and welfare generosity?"
+        - ❌ "Tell me about welfare"
 
         **Focus on Your Research Domain:**
-        - ✅ "What is the evidence on hot spots policing effectiveness?"
-        - ❌ "What is crime?"
+        - ✅ "What does power resources theory predict about redistribution in postindustrial societies?"
+        - ❌ "What is the state?"
 
         **Use Academic Framing:**
         - ✅ "What theories explain the relationship between incarceration and recidivism?"
