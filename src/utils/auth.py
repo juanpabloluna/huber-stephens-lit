@@ -19,12 +19,16 @@ def require_auth():
     """Check authentication. Shows login form and calls st.stop() if not authenticated.
 
     Call this at the top of every page before any content.
+    Supports two passwords: ACCESS_PASSWORD (regular) and ADMIN_PASSWORD (admin).
     """
     access_password = _get_secret("ACCESS_PASSWORD")
+    admin_password = _get_secret("ADMIN_PASSWORD")
+
     if not access_password:
         # No password configured — allow access (local dev)
         if "user_name" not in st.session_state:
             st.session_state["user_name"] = "local_dev"
+            st.session_state["is_admin"] = True
         return
 
     if st.session_state.get("authenticated"):
@@ -39,10 +43,21 @@ def require_auth():
     if st.button("Enter", type="primary"):
         if not user_name.strip():
             st.error("Please enter your name.")
+        elif admin_password and password == admin_password:
+            st.session_state["authenticated"] = True
+            st.session_state["is_admin"] = True
+            st.session_state["user_name"] = user_name.strip()
+            st.rerun()
         elif password == access_password:
             st.session_state["authenticated"] = True
+            st.session_state["is_admin"] = False
             st.session_state["user_name"] = user_name.strip()
             st.rerun()
         else:
             st.error("Incorrect access code.")
     st.stop()
+
+
+def is_admin() -> bool:
+    """Check if the current user authenticated with the admin password."""
+    return st.session_state.get("is_admin", False)
