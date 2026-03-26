@@ -103,7 +103,7 @@ def main():
         unsafe_allow_html=True,
     )
     st.markdown(
-        '<div class="sub-header">RAG-based research assistant for the Huber-Stephens research program: welfare states, state capacity, redistribution, democracy, and comparative political economy (1992\u20132025)</div>',
+        '<div class="sub-header">RAG-based research assistant for the Huber-Stephens research program: power resources theory, welfare states, state capacity, redistribution, democracy, unions, the left, and comparative political economy (1992\u20132025)</div>',
         unsafe_allow_html=True,
     )
 

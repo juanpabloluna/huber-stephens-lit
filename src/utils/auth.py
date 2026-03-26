@@ -30,8 +30,8 @@ def require_auth():
     if st.session_state.get("authenticated"):
         return
 
-    st.markdown("## Qu\u00e9 funciona contra el crimen?")
-    st.markdown("This application is password-protected. Enter your name and the access code to continue.")
+    st.markdown("## Huber-Stephens Literature Expert")
+    st.markdown("RAG-based research assistant for the Huber-Stephens research program. This application is password-protected. Enter your name and the access code to continue.")
 
     user_name = st.text_input("Your name", key="login_name_input",
                               placeholder="e.g. Juan Pablo Luna")
