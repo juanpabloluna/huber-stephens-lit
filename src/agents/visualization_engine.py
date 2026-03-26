@@ -70,25 +70,23 @@ class VisualizationEngine:
             Complete HTML string
         """
         # Retrieve relevant context
+        min_year = year_range[0] if year_range else None
+        max_year = year_range[1] if year_range else None
         results = self.retriever.retrieve(
             query=request,
             n_results=n_results,
-            year_range=year_range,
+            min_year=min_year,
+            max_year=max_year,
         )
 
-        # Build context from results (RetrievalResult is a Pydantic model)
+        # Build context from results (RetrievalResult Pydantic model with .chunk attribute)
         context_parts = []
         for r in results:
-            # Handle both dict and Pydantic model formats
-            if hasattr(r, "metadata"):
-                meta = r.metadata if isinstance(r.metadata, dict) else {}
-                text = r.document if hasattr(r, "document") else str(r)
-            else:
-                meta = r.get("metadata", {}) if isinstance(r, dict) else {}
-                text = r.get("document", "") if isinstance(r, dict) else str(r)
-            authors = meta.get("authors", "Unknown") if isinstance(meta, dict) else "Unknown"
-            year = meta.get("year", "") if isinstance(meta, dict) else ""
-            title = meta.get("title", "") if isinstance(meta, dict) else ""
+            chunk = r.chunk
+            authors = "; ".join(chunk.authors) if chunk.authors else "Unknown"
+            year = chunk.year or ""
+            title = chunk.title or ""
+            text = chunk.text or ""
             context_parts.append(
                 f"**[{authors} ({year}): {title}]**\n{text}\n"
             )
